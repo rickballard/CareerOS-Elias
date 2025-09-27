@@ -1,0 +1,38 @@
+name: Quarterly check-in
+
+on:
+  schedule:
+    - cron: '0 14 1 */3 *'  # 1st day of every 3rd month at 14:00 UTC
+  workflow_dispatch:
+
+jobs:
+  open_checkin:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      discussions: write
+    steps:
+      - name: Create or update quarterly check-in issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "Quarterly Career Check‑in";
+            const body = [
+              "Prompts:",
+              "- What changed in the market?",
+              "- What did I ship? Evidence links.",
+              "- Which packaging options still fit?",
+              "- What to do next quarter?"
+            ].join("\n");
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open'
+            });
+            const existing = issues.find(i => i.title === title);
+            if (existing) { 
+              await github.rest.issues.createComment({owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body: "New quarter — add updates here."});
+            } else {
+              await github.rest.issues.create({owner: context.repo.owner, repo: context.repo.repo, title, body});
+            }
