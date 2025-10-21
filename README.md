@@ -34,3 +34,9 @@ vision/          # life-vision working doc
 .github/workflows/quarterly-checkin.yml  # automated prompts
 tools/           # helper scripts (profile sync, etc.)
 ```
+
+<!-- BEGIN: STATUS -->
+### Operational Status
+CoDrift Index: n/a% (n/a)
+<!-- END: STATUS -->
+
